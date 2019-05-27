@@ -1,4 +1,4 @@
-## После установки нужно поставить ряд плагинов
+## После установки нужно поставить ряд плагинов (с нуля)
 
 [laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper) - сильно улучшает автокомплит для IDE, притом всех, имеет специальный файл для PhpStorm
 
@@ -9,17 +9,43 @@ composer require barryvdh/laravel-ide-helper
 ```bash
 composer require doctrine/dbal
 ```
-В composer.json прописываем скрипт генерации автокомплита
-```json
- "post-update-cmd": [
-    "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-    "@php artisan ide-helper:generate",
-    "@php artisan ide-helper:meta",
-    "@php artisan ide-helper:models -W"
- ]
+Выносим конфиги
+```bash
+php artisan vendor:publish --provider="Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider" --tag=config
+```
+И там меняем 'include_fluent' => false, на  'include_fluent' => true,
+
+Комманды для генерации файлов автокомплита
+```bash
+php artisan ide-helper:generate
+php artisan ide-helper:meta
+php artisan ide-helper:models -W
+```
+Ставим вояджер
+```bash
+composer require tcg/voyager
+php artisan voyager:install --with-dummy
+php artisan voyager:admin your@email.com --create
+```
+Ставил остальные плагины Voyager
+
+```bash
+composer require pvtl/voyager-frontend
+composer dump-autoload && php artisan voyager-frontend:install
+npm run dev
+echo "SCOUT_DRIVER=tntsearch" >> .env
 ```
 
+```bash
+composer require pvtl/voyager-page-blocks
+php artisan voyager-page-blocks:install
+php artisan voyager-page-blocks:seed
+```
 
+```bash
+composer require pvtl/voyager-forms
+composer dump-autoload && php artisan voyager-forms:install
+```
 
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
